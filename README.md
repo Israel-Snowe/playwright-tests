@@ -66,6 +66,9 @@ npm run test:navigation
 
 # Certificate tests only
 npm run test:certificates
+
+# Demo flow (comprehensive example)
+npx playwright test tests/demo-flow.spec.js
 ```
 
 ### View test reports
@@ -99,6 +102,12 @@ npm run report
 - Certificate viewing
 - Certificate actions (view, edit, download, delete)
 - Pagination
+
+### Demo Flow Tests
+- Complete end-to-end user journey
+- Mobile responsive testing
+- Visual regression testing with screenshots
+- Error handling demonstration
 
 ## Configuration
 
@@ -147,21 +156,69 @@ When adding new tests:
 ## Troubleshooting
 
 ### Browser Installation Issues
-If you encounter browser installation issues, try:
+Browser installation can fail in CI environments or with network restrictions. Try these solutions:
+
 ```bash
+# Force reinstall all browsers
 npx playwright install --force
+
+# Install only Chromium (smaller download)
+npx playwright install chromium
+
+# Install browsers with dependencies (Linux)
+npx playwright install-deps
+npx playwright install
 ```
 
+If browser installation continues to fail:
+1. Check network connectivity and proxy settings
+2. Try running in a different environment
+3. Use Docker with pre-installed browsers
+4. Contact your system administrator about firewall/proxy settings
+
 ### Test Failures
-1. Check the HTML report: `npm run report`
-2. Review screenshots in the `screenshots/` directory
-3. Check the console output for error messages
-4. Verify the base URL is correct
+1. **Check the HTML report**: `npm run report`
+2. **Review screenshots**: Check the `screenshots/` directory for visual debugging
+3. **Console output**: Look for error messages and network failures
+4. **Verify base URL**: Ensure `BASE_URL` environment variable is correct
+5. **Browser compatibility**: Try different browsers with `--project=chromium` or `--project=firefox`
 
 ### Environment Issues
-- Ensure the Certicraft application is accessible
-- Check network connectivity
-- Verify environment variables are set correctly
+- **Application accessibility**: Ensure the Certicraft application is running and accessible
+- **Network connectivity**: Check firewall rules and DNS resolution
+- **Environment variables**: Verify `BASE_URL` and other configuration
+- **Permissions**: Ensure write permissions for screenshots and reports
+
+### Common Error Solutions
+
+**"Executable doesn't exist" error**:
+```bash
+npm run install-browsers
+```
+
+**Timeout errors**:
+- Increase timeout in `playwright.config.js`
+- Check network speed and stability
+- Verify application responsiveness
+
+**Element not found errors**:
+- Check if selectors match the actual application
+- Review screenshots to see current page state
+- Update selectors in page objects if UI has changed
+
+### Running in CI/CD
+For continuous integration environments:
+```bash
+# Install dependencies first
+npm ci
+
+# Install browsers with system dependencies
+npx playwright install-deps
+npx playwright install
+
+# Run tests with CI configuration
+CI=true npm test
+```
 
 ## Notes
 
